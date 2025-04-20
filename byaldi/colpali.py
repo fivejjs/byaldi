@@ -24,6 +24,7 @@ from transformers.utils.import_utils import is_flash_attn_2_available
 # Import version directly from the package metadata
 VERSION = version("Byaldi")
 
+#TODO: define a function/dict to load the model and processor
 
 class ColPaliModel:
     def __init__(
@@ -72,7 +73,7 @@ class ColPaliModel:
         self.doc_id_to_metadata = {}
         self.doc_ids_to_file_names = {}
         self.doc_ids = set()
-
+        # TODO: user full model id instead of model name
         if "colpali" in pretrained_model_name_or_path.lower():
             self.model = ColPali.from_pretrained(
                 self.pretrained_model_name_or_path,
