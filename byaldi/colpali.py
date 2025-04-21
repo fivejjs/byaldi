@@ -24,7 +24,13 @@ from transformers.utils.import_utils import is_flash_attn_2_available
 # Import version directly from the package metadata
 VERSION = version("Byaldi")
 
-#TODO: define a function/dict to load the model and processor
+# TODO: define a function/dict to load the model and processor
+MODEL_CLASSES = {
+    "colpali": (ColPali, ColPaliProcessor),
+    "colqwen2": (ColQwen2, ColQwen2Processor),
+    "colqwen2.5": (ColQwen2_5, ColQwen2_5_Processor),
+}
+
 
 class ColPaliModel:
     def __init__(
@@ -60,7 +66,9 @@ class ColPaliModel:
         device = device or (
             "cuda"
             if torch.cuda.is_available()
-            else "mps" if torch.backends.mps.is_available() else "cpu"
+            else "mps"
+            if torch.backends.mps.is_available()
+            else "cpu"
         )
         self.index_name = index_name
         self.verbose = verbose
@@ -68,6 +76,7 @@ class ColPaliModel:
         self.index_root = index_root
         self.kwargs = kwargs
         self.collection = {}
+        # type of embeddings ?
         self.indexed_embeddings = []
         self.embed_id_to_doc_id = {}
         self.doc_id_to_metadata = {}
@@ -608,7 +617,7 @@ class ColPaliModel:
                     print(
                         f"Resizing image to {new_width}x{new_height}",
                         f"(aspect ratio {aspect_ratio:.2f}, original size {img_width}x{img_height},"
-                        f"compression {new_width/img_width * new_height/img_height:.2f})",
+                        f"compression {new_width / img_width * new_height / img_height:.2f})",
                     )
                 image = image.resize((new_width, new_height), Image.LANCZOS)
 
